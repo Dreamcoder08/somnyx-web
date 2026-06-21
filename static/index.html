@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOMNYX — dreamcoder08</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary:   #000000;
+  --bg-card:      #111111;
+  --bg-elevated:  #1a1a1a;
+  --bg-tag:       #222222;
+  --text-primary:   #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-tertiary:  #71717a;
+  --accent-blue:   #3b82f6;
+  --accent-green:  #22c55e;
+  --accent-amber:  #f59e0b;
+  --accent-red:    #ef4444;
+  --accent-purple: #8b5cf6;
+  --bg-green:  #0a1f12; --border-green:  #166534;
+  --bg-amber:  #1a1506; --border-amber:  #92400e;
+  --bg-red:    #1f0a0a; --border-red:    #991b1b;
+  --bg-blue:   #0a1628; --border-blue:   #1e40af;
+  --border-default: #2a2a2a;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --radius-xl: 20px; --radius-pill: 100px;
+  --font-xs:   clamp(0.65rem, 0.6rem  + 0.2vw,  0.75rem);
+  --font-sm:   clamp(0.75rem, 0.7rem  + 0.25vw, 0.85rem);
+  --font-base: clamp(0.85rem, 0.8rem  + 0.25vw, 0.95rem);
+  --font-md:   clamp(0.95rem, 0.85rem + 0.4vw,  1.1rem);
+  --font-lg:   clamp(1.1rem,  1rem    + 0.5vw,  1.35rem);
+  --font-xl:   clamp(1.5rem,  1.2rem  + 1vw,    2rem);
+  --font-2xl:  clamp(2rem,    1.5rem  + 2vw,    3rem);
+  --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
+  --space-lg: 1.5rem;  --space-xl: 2rem;   --space-2xl: 3rem;
+}
+
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  padding: var(--space-md);
+  max-width: 1280px;
+  margin: 0 auto;
+  animation: fadein 0.3s ease;
+}
+@keyframes fadein { from { opacity:0 } to { opacity:1 } }
+p { color: var(--text-secondary); font-size: var(--font-base); margin-bottom: var(--space-sm); }
+strong { color: var(--text-primary); font-weight: 700; }
+
+/* ── HEADER ── */
+.header {
+  display: flex; flex-wrap: wrap;
+  justify-content: space-between; align-items: flex-start;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--border-default);
+}
+.brand-title { font-size: var(--font-2xl); font-weight: 900; letter-spacing: -2px; line-height: 1.1; }
+.brand-subtitle { font-size: var(--font-md); font-weight: 500; color: var(--text-secondary); margin-top: var(--space-xs); }
+.brand-tags { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+.header-meta { text-align: right; flex-shrink: 0; }
+.doc-info { font-size: var(--font-xs); color: var(--text-tertiary); line-height: 1.8; }
+.doc-info strong { color: var(--text-secondary); }
+
+/* ── TAGS & BADGES ── */
+.tag {
+  display: inline-flex; align-items: center;
+  font-size: var(--font-xs); font-weight: 600;
+  padding: 6px 14px; border-radius: var(--radius-pill);
+  background: var(--bg-tag); color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 0 0 999px var(--bg-tag) inset;
+  white-space: nowrap; min-height: 32px;
+}
+.tag--solid { background: var(--text-primary); color: var(--bg-primary); border: none; font-weight: 700; box-shadow: 0 0 0 999px var(--text-primary) inset; }
+.tag--green { background: var(--bg-green); color: var(--accent-green); border-color: var(--border-green); box-shadow: 0 0 0 999px var(--bg-green) inset; }
+.tag--blue  { background: var(--bg-blue);  color: var(--accent-blue);  border-color: var(--border-blue);  box-shadow: 0 0 0 999px var(--bg-blue)  inset; }
+.tag--amber { background: var(--bg-amber); color: var(--accent-amber); border-color: var(--border-amber); box-shadow: 0 0 0 999px var(--bg-amber) inset; }
+.tag--red   { background: var(--bg-red);   color: var(--accent-red);   border-color: var(--border-red);   box-shadow: 0 0 0 999px var(--bg-red)   inset; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-blue); color: var(--accent-blue);
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  font-size: var(--font-xs); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  border: 1px solid var(--border-blue); margin-bottom: var(--space-md);
+  box-shadow: 0 0 0 999px var(--bg-blue) inset;
+}
+.badge::before {
+  content:''; width:8px; height:8px; border-radius:50%; flex-shrink:0;
+  background: var(--text-tertiary); transition: background 0.4s, box-shadow 0.4s;
+}
+.badge.alive::before { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-size: var(--font-xs); font-weight: 700; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin: var(--space-2xl) 0 var(--space-lg); padding-left: 4px;
+}
+.section-title:first-of-type { margin-top: var(--space-xl); }
+
+/* ── GRIDS ── */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px,100%),1fr)); gap: var(--space-md); }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px,100%),1fr)); gap: var(--space-md); }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px,100%),1fr)); gap: var(--space-md); margin-bottom: var(--space-xl); }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg-card); border-radius: var(--radius-xl);
+  padding: var(--space-lg); border: 1px solid var(--border-default);
+  box-shadow: 0 0 0 999px var(--bg-card) inset;
+}
+
+/* ── METRIC ── */
+.metric {
+  background: var(--bg-card); border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl); padding: var(--space-lg) var(--space-md);
+  text-align: center; box-shadow: 0 0 0 999px var(--bg-card) inset;
+}
+.metric__value { font-size: var(--font-xl); font-weight: 800; letter-spacing: -1px; margin-bottom: var(--space-xs); }
+.metric__value--green { color: var(--accent-green); }
+.metric__value--blue  { color: var(--accent-blue);  }
+.metric__value--amber { color: var(--accent-amber); }
+.metric__label { font-size: var(--font-xs); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+/* ── TECH LIST ── */
+.tech-list { list-style: none; margin: 0; padding: 0; }
+.tech-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-default); gap: var(--space-md);
+}
+.tech-list li:last-child { border-bottom: none; }
+.tech-list__key { font-weight: 600; color: var(--text-primary); font-size: var(--font-base); }
+.tech-list__key.muted  { color: var(--text-tertiary); padding-left: 1rem; }
+.tech-list__key.accent { color: var(--accent-blue); }
+.tech-list__key.mono   { font-family: 'Monaco','Menlo',monospace; font-size: var(--font-xs); color: var(--text-secondary); font-weight:500; }
+.tech-list__val { color: var(--text-secondary); font-weight: 500; font-size: var(--font-sm); text-align: right; }
+.tech-list__val--green { color: var(--accent-green); font-weight: 700; }
+.tech-list__val--amber { color: var(--accent-amber); font-weight: 700; }
+.tech-list__val--red   { color: var(--accent-red);   font-weight: 700; }
+.tech-list__val.mono   { font-family: 'Monaco','Menlo',monospace; font-size: var(--font-xs); }
+
+/* ── BANNER ── */
+.banner {
+  border-radius: var(--radius-lg); padding: var(--space-lg);
+  margin: var(--space-md) 0; border: 1px solid var(--border-default);
+  background: var(--bg-card); box-shadow: 0 0 0 999px var(--bg-card) inset;
+}
+.banner--green { background: var(--bg-green); border-color: var(--border-green); box-shadow: 0 0 0 999px var(--bg-green) inset; }
+.banner--amber { background: var(--bg-amber); border-color: var(--border-amber); box-shadow: 0 0 0 999px var(--bg-amber) inset; }
+.banner--red   { background: var(--bg-red);   border-color: var(--border-red);   box-shadow: 0 0 0 999px var(--bg-red)   inset; }
+.banner--blue  { background: var(--bg-blue);  border-color: var(--border-blue);  box-shadow: 0 0 0 999px var(--bg-blue)  inset; }
+.banner__title { font-size: var(--font-base); font-weight: 700; margin-bottom: var(--space-xs); }
+.banner__title--green { color: var(--accent-green); }
+.banner__title--amber { color: var(--accent-amber); }
+.banner__title--red   { color: var(--accent-red);   }
+.banner__title--blue  { color: var(--accent-blue);  }
+.banner__text { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.6; }
+
+/* ── GAUGE ── */
+.gauge-block { margin-bottom: var(--space-md); }
+.gauge-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.gauge-label { font-size: var(--font-xs); font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; }
+.gauge-value { font-size: var(--font-sm); font-weight: 700; }
+.gauge-track { height: 5px; background: var(--bg-elevated); border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--border-default); }
+.gauge-fill  { height: 100%; border-radius: var(--radius-pill); transition: width 0.7s cubic-bezier(0.4,0,0.2,1), background 0.4s; width: 0%; }
+
+/* ── PROJECT CARD ── */
+.proj-card {
+  background: var(--bg-card); border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg); padding: var(--space-md);
+  box-shadow: 0 0 0 999px var(--bg-card) inset;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.proj-card__header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.proj-card__name { font-weight: 700; font-size: var(--font-base); }
+.proj-card__cat  { font-size: var(--font-xs); color: var(--text-tertiary); }
+.proj-card__commit {
+  font-family: 'Monaco','Menlo',monospace; font-size: var(--font-xs);
+  color: var(--text-tertiary); white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis;
+}
+.proj-card__meta { display: flex; gap: 8px; align-items: center; }
+.proj-card__branch { font-family: 'Monaco','Menlo',monospace; font-size: var(--font-xs); }
+
+/* ── NET TABLE ── */
+.net-table { width: 100%; border-collapse: collapse; font-size: var(--font-sm); }
+.net-table th {
+  background: var(--bg-elevated); color: var(--text-secondary);
+  padding: var(--space-sm) var(--space-md); text-align: left;
+  font-weight: 700; font-size: var(--font-xs); text-transform: uppercase;
+  letter-spacing: 1px; border-bottom: 1px solid var(--border-default);
+  box-shadow: 0 0 0 999px var(--bg-elevated) inset;
+}
+.net-table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-secondary); font-size: var(--font-sm);
+}
+.net-table tr:last-child td { border-bottom: none; }
+.net-table .mono { font-family: 'Monaco','Menlo',monospace; font-size: var(--font-xs); }
+
+/* ── STATUS DOT ── */
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--text-tertiary); flex-shrink: 0; }
+.dot.up   { background: var(--accent-green); box-shadow: 0 0 4px var(--accent-green); }
+.dot.down { background: var(--accent-red); }
+
+/* ── SHORTCUTS ── */
+.shortcuts { display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center; padding: var(--space-sm) 0; }
+.kbd-pair { display: flex; align-items: center; gap: 6px; font-size: var(--font-xs); }
+.kbd {
+  font-family: 'Monaco','Menlo',monospace; font-weight: 700; color: var(--accent-blue);
+  background: var(--bg-blue); border: 1px solid var(--border-blue);
+  border-radius: 5px; padding: 1px 7px; box-shadow: 0 0 0 999px var(--bg-blue) inset;
+}
+.kbd-desc { color: var(--text-tertiary); }
+#status-msg { margin-left: auto; font-size: var(--font-xs); color: var(--accent-green); font-weight: 600; opacity: 0; transition: opacity 0.3s; }
+#status-msg.show { opacity: 1; }
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: var(--space-2xl); padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-default);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md);
+}
+.footer__brand strong { font-size: var(--font-md); font-weight: 800; letter-spacing: -0.5px; }
+.footer__brand span { display: block; font-size: var(--font-xs); color: var(--text-tertiary); margin-top: 4px; }
+.footer__meta { font-size: var(--font-xs); color: var(--text-tertiary); text-align: right; }
+
+/* ── OVERLAY ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(4px); display: flex; align-items: center;
+  justify-content: center; z-index: 100; animation: fadein 0.2s ease;
+}
+.overlay-card {
+  background: var(--bg-card); border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl); padding: 32px 36px;
+  min-width: 380px; max-width: 500px; box-shadow: 0 0 0 999px var(--bg-card) inset;
+}
+.help-row { display: flex; align-items: center; gap: 16px; padding: 7px 0; border-bottom: 1px solid var(--border-default); font-size: var(--font-sm); }
+.help-row:last-of-type { border-bottom: none; }
+.help-row__desc { color: var(--text-secondary); }
+.overlay-hr { border: none; border-top: 1px solid var(--border-default); margin: var(--space-lg) 0; }
+.meta-row { display: flex; gap: var(--space-md); font-size: var(--font-sm); padding: 4px 0; }
+.meta-key { color: var(--accent-blue); font-weight: 600; min-width: 80px; }
+.meta-val { color: var(--text-secondary); }
+.btn-close {
+  display: block; width: 100%; margin-top: var(--space-lg); padding: 10px;
+  border-radius: var(--radius-md); border: 1px solid var(--border-default);
+  background: var(--bg-elevated); color: var(--text-secondary);
+  font-size: var(--font-sm); font-weight: 600; font-family: inherit; cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn-close:hover { background: var(--bg-blue); color: var(--accent-blue); border-color: var(--border-blue); }
+
+/* ── RESPONSIVE ── */
+@media (min-width: 640px)  { body { padding: var(--space-lg); } }
+@media (min-width: 768px)  { body { padding: var(--space-xl) var(--space-lg); } }
+@media (min-width: 1024px) { body { padding: var(--space-xl); } }
+</style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<header class="header">
+  <div>
+    <div class="brand-title">SOMNYX</div>
+    <div class="brand-subtitle">Personal File System &mdash; dreamcoder08</div>
+    <div class="brand-tags">
+      <span class="tag tag--solid">Arch Linux</span>
+      <span class="tag tag--blue">Sistema</span>
+      <span class="tag tag--blue">Workspace</span>
+      <span class="tag tag--green">Inbox</span>
+      <span class="tag">Journal</span>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="badge" id="ws-badge">Live</div>
+    <div class="doc-info">
+      <strong>DASHBOARD</strong><br>
+      Somnus &times; Nyx<br>
+      <span id="clock">──</span>
+    </div>
+  </div>
+</header>
+
+<!-- ====== METRICS ====== -->
+<div class="grid-4">
+  <div class="metric">
+    <div class="metric__value metric__value--blue" id="m-cpu">–</div>
+    <div class="metric__label">CPU</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value metric__value--green" id="m-ram">–</div>
+    <div class="metric__label">RAM</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value metric__value--green" id="m-disk">–</div>
+    <div class="metric__label">Disco</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value" id="m-temp" style="color:var(--text-secondary)">–</div>
+    <div class="metric__label">Temp CPU</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value" id="m-load" style="color:var(--text-secondary)">–</div>
+    <div class="metric__label">Load avg</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value" id="m-swap" style="color:var(--text-secondary)">–</div>
+    <div class="metric__label">Swap</div>
+  </div>
+  <div class="metric">
+    <div class="metric__value" id="m-uptime" style="color:var(--text-secondary)">–</div>
+    <div class="metric__label">Uptime</div>
+  </div>
+</div>
+
+<!-- ====== SISTEMA ====== -->
+<h1 class="section-title">Sistema</h1>
+<div class="grid-2">
+  <!-- Gauges -->
+  <div class="card">
+    <div class="gauge-block">
+      <div class="gauge-header"><span class="gauge-label">CPU</span><span class="gauge-value" id="g-cpu-val">–</span></div>
+      <div class="gauge-track"><div class="gauge-fill" id="g-cpu-bar"></div></div>
+    </div>
+    <div class="gauge-block">
+      <div class="gauge-header"><span class="gauge-label">RAM</span><span class="gauge-value" id="g-ram-val">–</span></div>
+      <div class="gauge-track"><div class="gauge-fill" id="g-ram-bar"></div></div>
+    </div>
+    <div class="gauge-block">
+      <div class="gauge-header"><span class="gauge-label">Swap</span><span class="gauge-value" id="g-swap-val">–</span></div>
+      <div class="gauge-track"><div class="gauge-fill" id="g-swap-bar"></div></div>
+    </div>
+    <div class="gauge-block" style="margin-bottom:0">
+      <div class="gauge-header"><span class="gauge-label">Disco /</span><span class="gauge-value" id="g-disk-val">–</span></div>
+      <div class="gauge-track"><div class="gauge-fill" id="g-disk-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- Particiones + Timers -->
+  <div class="card">
+    <p style="font-size:var(--font-xs);font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:var(--space-sm)">Particiones</p>
+    <ul class="tech-list" id="partitions-list">
+      <li><span class="tech-list__key">Cargando…</span></li>
+    </ul>
+    <p style="font-size:var(--font-xs);font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1.5px;margin-top:var(--space-md);margin-bottom:var(--space-sm)">Timers systemd</p>
+    <ul class="tech-list">
+      <li><span class="tech-list__key">somnyx-clean</span><span class="tech-list__val" id="t-clean">–</span></li>
+      <li><span class="tech-list__key">inbox-alert</span><span class="tech-list__val" id="t-alert">–</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ====== WORKSPACE ====== -->
+<h1 class="section-title">Workspace</h1>
+<div class="grid-2">
+  <div class="card">
+    <ul class="tech-list">
+      <li><span class="tech-list__key">somnyx/</span><span class="tech-list__val--green tech-list__val" id="ws-size">…</span></li>
+      <li><span class="tech-list__key muted">├─ dev/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key muted" style="padding-left:2rem">├─ personal/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key muted" style="padding-left:2rem">├─ work/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key muted" style="padding-left:2rem">├─ oss/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key accent" style="padding-left:2rem">└─ arkonyx/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key muted">├─ lab/</span><span class="tech-list__val"></span></li>
+      <li><span class="tech-list__key muted">└─ ops/</span><span class="tech-list__val"></span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <ul class="tech-list">
+      <li><span class="tech-list__key">archive/</span><span class="tech-list__val" id="archive-size">…</span></li>
+      <li><span class="tech-list__key">vault/</span>  <span class="tech-list__val" id="vault-size">…</span></li>
+      <li><span class="tech-list__key">notes/</span>  <span class="tech-list__val" id="notes-size">…</span></li>
+      <li><span class="tech-list__key">media/</span>  <span class="tech-list__val" id="media-size">…</span></li>
+      <li><span class="tech-list__key">inbox/</span>  <span class="tech-list__val" id="inbox-sz">…</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ====== INBOX & JOURNAL ====== -->
+<h1 class="section-title">Inbox &amp; Journal</h1>
+<div class="grid-2">
+  <div>
+    <div class="banner banner--blue" id="inbox-banner">
+      <div class="banner__title banner__title--blue" id="inbox-title">–</div>
+      <div class="banner__text" id="inbox-sub"></div>
+    </div>
+    <div class="card">
+      <ul class="tech-list">
+        <li><span class="tech-list__key">Archivos totales</span><span class="tech-list__val" id="inbox-count">–</span></li>
+        <li><span class="tech-list__key">Sin clasificar &gt;7d</span><span class="tech-list__val" id="inbox-old">–</span></li>
+        <li><span class="tech-list__key">Tamaño</span><span class="tech-list__val" id="inbox-size-val">–</span></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="banner banner--blue" id="journal-banner">
+      <div class="banner__title banner__title--blue" id="journal-title">–</div>
+      <div class="banner__text" id="journal-date"></div>
+    </div>
+    <div class="card">
+      <ul class="tech-list">
+        <li><span class="tech-list__key">Estado</span><span class="tech-list__val" id="journal-status-val">–</span></li>
+        <li><span class="tech-list__key">Fecha</span><span class="tech-list__val" id="journal-date-val">–</span></li>
+        <li><span class="tech-list__key">Comando</span><span class="tech-list__val" style="color:var(--text-tertiary);font-style:italic">somnyx journal</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====== PROYECTOS ====== -->
+<h1 class="section-title">Proyectos activos</h1>
+<div class="grid-3" id="projects-grid">
+  <div class="proj-card"><div class="proj-card__name" style="color:var(--text-tertiary)">Cargando proyectos…</div></div>
+</div>
+
+<!-- ====== ARCHIVOS RECIENTES ====== -->
+<h1 class="section-title">Archivos recientes <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-tertiary)">(últimas 24h)</span></h1>
+<div class="card">
+  <ul class="tech-list" id="recent-list">
+    <li><span class="tech-list__key" style="color:var(--text-tertiary)">Cargando…</span></li>
+  </ul>
+</div>
+
+<!-- ====== RED & PROCESOS ====== -->
+<h1 class="section-title">Red &amp; Procesos</h1>
+<div class="grid-2">
+  <!-- Red -->
+  <div class="card">
+    <p style="font-size:var(--font-xs);font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:var(--space-md)">Interfaces de red</p>
+    <div style="overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border-default)">
+      <table class="net-table">
+        <thead>
+          <tr><th>Interfaz</th><th>IP</th><th>Estado</th></tr>
+        </thead>
+        <tbody id="net-tbody">
+          <tr><td colspan="3" style="color:var(--text-tertiary)">Cargando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Procesos -->
+  <div class="card">
+    <p style="font-size:var(--font-xs);font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:var(--space-md)">Top procesos por CPU</p>
+    <div style="overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border-default)">
+      <table class="net-table">
+        <thead>
+          <tr><th>Proceso</th><th>CPU%</th><th>MEM%</th><th>User</th></tr>
+        </thead>
+        <tbody id="proc-tbody">
+          <tr><td colspan="4" style="color:var(--text-tertiary)">Cargando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SHORTCUTS ====== -->
+<h1 class="section-title">Atajos</h1>
+<div class="shortcuts">
+  <div class="kbd-pair"><span class="kbd">[r]</span><span class="kbd-desc">refresh</span></div>
+  <div class="kbd-pair"><span class="kbd">[j]</span><span class="kbd-desc">journal</span></div>
+  <div class="kbd-pair"><span class="kbd">[y]</span><span class="kbd-desc">yazi</span></div>
+  <div class="kbd-pair"><span class="kbd">[f]</span><span class="kbd-desc">buscar</span></div>
+  <div class="kbd-pair"><span class="kbd">[?]</span><span class="kbd-desc">ayuda</span></div>
+  <span id="status-msg"></span>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer">
+  <div class="footer__brand">
+    <strong>SOMNYX</strong>
+    <span>Personal File System &bull; dreamcoder08</span>
+  </div>
+  <div class="footer__meta">
+    Somnus &times; Nyx<br>
+    2026.03 &bull; Arch Linux
+  </div>
+</footer>
+
+<!-- ====== JS ====== -->
+<script>
+"use strict";
+
+// ── Reloj ──────────────────────────────────────────────────────────────────
+const $clock = document.getElementById("clock");
+function tickClock() {
+  const d = new Date(), p = n => String(n).padStart(2,"0");
+  $clock.textContent = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}  ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+tickClock(); setInterval(tickClock, 1000);
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function tcolor(v, warn, crit) {
+  return v >= crit ? "var(--accent-red)" : v >= warn ? "var(--accent-amber)" : "var(--accent-green)";
+}
+
+function setGauge(barId, valId, pct, text, warn, crit) {
+  const c   = tcolor(pct, warn, crit);
+  const bar = document.getElementById(barId);
+  const val = document.getElementById(valId);
+  bar.style.width = Math.min(pct, 100) + "%";
+  bar.style.background = c;
+  val.style.color = c;
+  val.textContent = text;
+}
+
+function setText(id, txt, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = txt;
+  if (color) el.style.color = color;
+}
+
+let _st;
+function flash(msg) {
+  const el = document.getElementById("status-msg");
+  el.textContent = "✓ " + msg;
+  el.classList.add("show");
+  clearTimeout(_st);
+  _st = setTimeout(() => el.classList.remove("show"), 3000);
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render(data) {
+  const sys = data.system;
+  const ws  = data.workspace;
+
+  // — Métricas superiores —
+  const cpuC = tcolor(sys.cpu_percent, 50, 80);
+  setText("m-cpu",    sys.cpu_percent.toFixed(0) + "%", cpuC);
+
+  const ramPct = sys.ram_total_gb > 0 ? sys.ram_used_gb / sys.ram_total_gb * 100 : 0;
+  setText("m-ram",  sys.ram_used_gb.toFixed(1) + " GB", tcolor(ramPct, 60, 85));
+
+  const dskPct = sys.disk_total_gb > 0 ? sys.disk_used_gb / sys.disk_total_gb * 100 : 0;
+  setText("m-disk", sys.disk_used_gb.toFixed(0) + " GB", tcolor(dskPct, 70, 85));
+
+  setText("m-temp",   sys.cpu_temp,  sys.cpu_temp === "N/A" ? "var(--text-tertiary)" : tcolor(parseFloat(sys.cpu_temp)||0, 70, 85));
+  setText("m-load",   sys.load["1m"].toFixed(2), tcolor(sys.load["1m"], 2, 4));
+  setText("m-swap",   sys.swap.total_mb > 0 ? sys.swap.used_mb + " MB" : "Sin swap", tcolor(sys.swap.percent||0, 50, 80));
+  setText("m-uptime", sys.uptime);
+
+  // — Gauges —
+  setGauge("g-cpu-bar",  "g-cpu-val",  sys.cpu_percent, sys.cpu_percent.toFixed(0) + "%", 50, 80);
+  setGauge("g-ram-bar",  "g-ram-val",  ramPct, `${sys.ram_used_gb.toFixed(1)} / ${sys.ram_total_gb.toFixed(1)} GB`, 60, 85);
+  setGauge("g-swap-bar", "g-swap-val", sys.swap.percent||0, sys.swap.total_mb > 0 ? `${sys.swap.used_mb} / ${sys.swap.total_mb} MB` : "Sin swap", 50, 80);
+  setGauge("g-disk-bar", "g-disk-val", dskPct, `${sys.disk_used_gb.toFixed(0)} / ${sys.disk_total_gb.toFixed(0)} GB`, 70, 85);
+
+  // — Particiones —
+  const partEl = document.getElementById("partitions-list");
+  if (sys.partitions && sys.partitions.length) {
+    partEl.innerHTML = sys.partitions.map(p => {
+      const c = tcolor(p.percent, 70, 85);
+      return `<li>
+        <span class="tech-list__key mono">${p.mount}</span>
+        <span class="tech-list__val" style="color:${c}">${p.used_gb}/${p.total_gb} GB &bull; ${p.percent}%</span>
+      </li>`;
+    }).join("");
+  }
+
+  // — Timers —
+  setText("t-clean", ws.timer_clean);
+  setText("t-alert", ws.timer_alert);
+
+  // — Workspace —
+  setText("ws-size",      ws.workspace_size);
+  setText("archive-size", ws.archive_size);
+  setText("vault-size",   ws.vault_size);
+  setText("notes-size",   ws.notes_size);
+  setText("media-size",   ws.media_size);
+  setText("inbox-sz",     ws.inbox_size);
+
+  // — Inbox —
+  const ib = document.getElementById("inbox-banner");
+  ib.className = "banner";
+  setText("inbox-count",    ws.inbox_count);
+  setText("inbox-old",      ws.inbox_old);
+  setText("inbox-size-val", ws.inbox_size);
+  if (ws.inbox_count === 0) {
+    ib.classList.add("banner--green");
+    setText("inbox-title", "✓  Inbox limpio", "var(--accent-green)");
+    setText("inbox-sub", "Sin archivos pendientes");
+  } else if (ws.inbox_old > 0) {
+    ib.classList.add("banner--red");
+    setText("inbox-title", `${ws.inbox_count} archivo(s) — ${ws.inbox_old} sin clasificar >7d`, "var(--accent-red)");
+    setText("inbox-sub", "Requiere atención");
+  } else {
+    ib.classList.add("banner--amber");
+    setText("inbox-title", `${ws.inbox_count} archivo(s) pendientes`, "var(--accent-amber)");
+    setText("inbox-sub", "Pendientes de clasificar");
+  }
+
+  // — Journal —
+  const jb = document.getElementById("journal-banner");
+  jb.className = "banner";
+  setText("journal-date-val",   ws.journal_date);
+  setText("journal-status-val", ws.journal_today ? "Registrada" : "Sin entrada");
+  setText("journal-date",       ws.journal_date);
+  if (ws.journal_today) {
+    jb.classList.add("banner--green");
+    setText("journal-title", "✓  Entrada de hoy registrada", "var(--accent-green)");
+  } else {
+    jb.classList.add("banner--amber");
+    setText("journal-title", "✗  Sin entrada aún", "var(--accent-amber)");
+  }
+
+  // — Proyectos —
+  const grid = document.getElementById("projects-grid");
+  if (data.projects && data.projects.length) {
+    grid.innerHTML = data.projects.map(p => {
+      const branchColor = p.branch === "main" || p.branch === "master" ? "var(--accent-green)" : "var(--accent-blue)";
+      const hasGitTag   = p.has_git
+        ? `<span class="tag tag--blue" style="font-size:0.6rem;padding:2px 8px;min-height:20px">git</span>`
+        : `<span class="tag" style="font-size:0.6rem;padding:2px 8px;min-height:20px;color:var(--text-tertiary)">no git</span>`;
+      return `<div class="proj-card">
+        <div class="proj-card__header">
+          <span class="proj-card__name">${p.name}</span>
+          ${hasGitTag}
+        </div>
+        <div class="proj-card__meta">
+          <span class="proj-card__cat" style="color:var(--text-tertiary)">${p.category}/</span>
+          ${p.has_git ? `<span class="proj-card__branch" style="color:${branchColor}">⎇ ${p.branch}</span>` : ""}
+          <span style="margin-left:auto;font-size:var(--font-xs);color:var(--text-tertiary)">${p.modified}</span>
+        </div>
+        ${p.has_git ? `<div class="proj-card__commit">${p.last_commit}</div>` : ""}
+      </div>`;
+    }).join("");
+  } else {
+    grid.innerHTML = `<div class="proj-card"><div class="proj-card__name" style="color:var(--text-tertiary)">Sin proyectos detectados</div></div>`;
+  }
+
+  // — Archivos recientes —
+  const recEl = document.getElementById("recent-list");
+  if (data.recent && data.recent.length) {
+    recEl.innerHTML = data.recent.map(f => `
+      <li>
+        <span class="tech-list__key mono">${f.path}</span>
+        <span class="tech-list__val" style="color:var(--text-tertiary)">${f.time}</span>
+      </li>`).join("");
+  } else {
+    recEl.innerHTML = `<li><span class="tech-list__key" style="color:var(--text-tertiary)">Sin cambios en las últimas 24h</span></li>`;
+  }
+
+  // — Red —
+  const netEl = document.getElementById("net-tbody");
+  if (sys.network && sys.network.length) {
+    netEl.innerHTML = sys.network.map(n => {
+      const up   = n.status === "up";
+      const dotC = up ? "up" : "down";
+      return `<tr>
+        <td><strong>${n.name}</strong></td>
+        <td class="mono">${n.ip}</td>
+        <td><span class="dot ${dotC}"></span> ${n.status}</td>
+      </tr>`;
+    }).join("");
+  } else {
+    netEl.innerHTML = `<tr><td colspan="3" style="color:var(--text-tertiary)">Sin datos de red</td></tr>`;
+  }
+
+  // — Procesos —
+  const procEl = document.getElementById("proc-tbody");
+  if (sys.processes && sys.processes.length) {
+    procEl.innerHTML = sys.processes.map(p => {
+      const cpuC = tcolor(p.cpu, 30, 60);
+      const memC = tcolor(p.mem, 10, 25);
+      return `<tr>
+        <td><strong>${p.name}</strong></td>
+        <td style="color:${cpuC};font-weight:700">${p.cpu.toFixed(1)}%</td>
+        <td style="color:${memC};font-weight:700">${p.mem.toFixed(1)}%</td>
+        <td style="color:var(--text-tertiary)">${p.user}</td>
+      </tr>`;
+    }).join("");
+  } else {
+    procEl.innerHTML = `<tr><td colspan="4" style="color:var(--text-tertiary)">Sin datos</td></tr>`;
+  }
+}
+
+// ── WebSocket ──────────────────────────────────────────────────────────────
+const badge = document.getElementById("ws-badge");
+let ws, delay = 1500;
+
+function connect() {
+  ws = new WebSocket(`ws://${location.host}/ws`);
+  ws.onopen = () => {
+    badge.classList.add("alive");
+    delay = 1500;
+    fetch("/api/stats").then(r => r.json()).then(render).catch(() => {});
+  };
+  ws.onmessage = e => { try { render(JSON.parse(e.data)); } catch {} };
+  ws.onclose   = () => {
+    badge.classList.remove("alive");
+    setTimeout(connect, delay);
+    delay = Math.min(delay * 1.5, 12000);
+  };
+  ws.onerror = () => ws.close();
+}
+connect();
+
+// ── Teclado ────────────────────────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+  if (document.getElementById("overlay")) {
+    if (e.key === "Escape") closeHelp();
+    return;
+  }
+  switch (e.key.toLowerCase()) {
+    case "r": fetch("/api/stats").then(r=>r.json()).then(d=>{render(d);flash("datos actualizados");}); break;
+    case "j": flash("usa somnyx journal en tu terminal"); break;
+    case "y": flash("usa somnyx tree en tu terminal"); break;
+    case "f": flash("usa somnyx find <término> en tu terminal"); break;
+    case "?": showHelp(); break;
+  }
+});
+
+// ── Help ───────────────────────────────────────────────────────────────────
+function showHelp() {
+  if (document.getElementById("overlay")) return;
+  const ov = document.createElement("div");
+  ov.id = "overlay"; ov.className = "overlay";
+  ov.innerHTML = `
+    <div class="overlay-card">
+      <div class="brand-title" style="font-size:var(--font-xl);margin-bottom:var(--space-lg)">SOMNYX</div>
+      <h1 class="section-title" style="margin-top:0">Atajos de teclado</h1>
+      ${[["[r]","Refrescar datos"],["[j]","Journal en terminal"],["[y]","Yazi file manager"],["[f]","Buscar archivos"],["[?]","Esta ayuda"],["[Esc]","Cerrar"]].map(([k,d])=>`
+        <div class="help-row"><span class="kbd">${k}</span><span class="help-row__desc">${d}</span></div>`).join("")}
+      <hr class="overlay-hr">
+      <h1 class="section-title" style="margin-top:0">SOMNYX</h1>
+      <div class="meta-row"><span class="meta-key">Somnus</span><span class="meta-val">Dios romano del sueño</span></div>
+      <div class="meta-row"><span class="meta-key">Nyx</span><span class="meta-val">Diosa griega de la noche</span></div>
+      <div class="meta-row"><span class="meta-key">Autor</span><span class="meta-val">dreamcoder08</span></div>
+      <div class="meta-row"><span class="meta-key">Versión</span><span class="meta-val">2026.03</span></div>
+      <button class="btn-close" onclick="closeHelp()">Cerrar</button>
+    </div>`;
+  ov.addEventListener("click", e => { if (e.target === ov) closeHelp(); });
+  document.body.appendChild(ov);
+}
+function closeHelp() { document.getElementById("overlay")?.remove(); }
+</script>
+</body>
+</html>
