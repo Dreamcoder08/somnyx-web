@@ -1,35 +1,67 @@
-# somnyx — System Dashboard
+# SOMNYX Web Dashboard
 
-> Real-time system monitoring dashboard with FastAPI + WebSocket streaming.
+> Real-time system monitoring dashboard — FastAPI + WebSocket streaming under the Somnus × Nyx identity.
 
-**¿Para quién?** Para developers que quieren monitorear CPU, RAM, disco, red, procesos y workspace en tiempo real desde el navegador, con WebSocket push cada 2 segundos.
+A lightweight web dashboard by Dreamcoder08 that streams system statistics to connected clients in real time via WebSocket, with a static HTML frontend and REST API fallback.
+
+---
 
 ## Quickstart
 
 ```bash
-pip install -r requirements.txt
-python main.py
+cd somnyx-web
+python3 main.py
 ```
 
-Abre `http://127.0.0.1:8080` — los datos se actualizan solos vía WebSocket.
+**App available at:** `http://localhost:8080`
 
-## Stack
+---
 
-- **Backend**: Python · FastAPI · WebSocket · Uvicorn
-- **Frontend**: HTML + CSS (dark theme) · Vanilla JS
-- **Datasource**: `/proc`, `du`, `df`, `ps`, `ip`, `fd` (Linux)
+## Architecture
 
-## Features
+A simple FastAPI server serves a static frontend and maintains a WebSocket connection manager. Every 2 seconds, system statistics are broadcast to all connected clients.
 
-- CPU, RAM, swap, disk gauges with color thresholds
-- Real-time network interface status
-- Top processes by CPU usage
-- Workspace directory sizes (somnyx, archive, vault, notes, inbox)
-- Journal status tracking
-- Active git projects overview
-- Keyboard shortcuts: `r` refresh, `?` help
+```
+somnyx-web/
+├── main.py          # FastAPI server, WebSocket manager, broadcaster
+├── data.py          # System stats collection
+├── static/
+│   └── index.html   # Frontend dashboard (HTML/CSS/JS)
+```
 
-## Proyectos relacionados
+---
 
-- [somnyx-tui](https://github.com/Dreamcoder08/somnyx-tui) — Terminal UI companion in Rust
-- [Dreamcoder08](https://github.com/Dreamcoder08) — Profile
+## Tech Stack
+
+| Layer | Tech | Purpose |
+|-------|------|---------|
+| Server | FastAPI + Uvicorn | Async HTTP and WebSocket server |
+| Frontend | Vanilla HTML/CSS/JS | Lightweight dashboard UI |
+| Real-time | WebSocket | Live stat streaming to clients |
+| Language | Python 3 | System data collection |
+
+---
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `python3 main.py` | Start the dashboard server on `:8080` |
+
+---
+
+## Project Status
+
+**Status:** Active
+
+---
+
+## License
+
+MIT
+
+---
+
+## SDD
+
+This project sits within the [Dreamcoder08](https://github.com/Dreamcoder08) ecosystem. Documentation is maintained in the [SDD Maestro](../arkelythex/sdd/ecosystem-readme-sdd/00-README.md).
